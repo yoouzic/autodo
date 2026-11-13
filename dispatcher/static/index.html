@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>AuToDo</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="/static/app.css">
+  <script src="/static/result-card.js" defer></script>
+  <script src="/static/task-conversation.js" defer></script>
+  <script src="/static/session-permissions.js" defer></script>
+  <script src="/static/app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到主内容</a>
+  <div class="app-shell" id="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="#board" aria-label="AuToDo 首页">
+        <span class="brand-mark" aria-hidden="true">A</span>
+        <span><strong>AuToDo</strong></span>
+      </a>
+      <nav class="navigation" aria-label="主导航">
+        <a class="nav-link active" href="#board" data-view="board" aria-current="page"><span class="nav-icon" aria-hidden="true">▥</span><span>任务看板</span></a>
+        <a class="nav-link" href="#review" data-view="review"><span class="nav-icon" aria-hidden="true">☑</span><span>待我复审</span><span class="nav-count" id="review-count" hidden></span></a>
+        <a class="nav-link" href="#workspaces" data-view="workspaces"><span class="nav-icon" aria-hidden="true">▱</span><span>工作区</span></a>
+        <a class="nav-link" href="#history" data-view="history"><span class="nav-icon" aria-hidden="true">≡</span><span>运行记录</span></a>
+      </nav>
+      <div class="sidebar-note"><span class="note-mark" aria-hidden="true">✓</span><div><strong>最后一步，由你确认</strong><p>自动检查通过后，<br>人工批准才会完成滴答任务。</p></div></div>
+      <div class="sidebar-status"><span class="status-dot" id="system-dot"></span><span id="system-status">正在连接调度器</span></div>
+    </aside>
+    <div class="app-frame">
+      <header class="topbar">
+        <div class="breadcrumb"><span>工作台</span><span aria-hidden="true">/</span><strong id="breadcrumb-current">任务看板</strong></div>
+        <div class="topbar-actions"><span id="last-sync" class="last-sync">等待同步状态</span><button id="sync-button" class="button secondary" disabled><span aria-hidden="true">↻</span> 同步滴答</button><button id="logout-button" class="button secondary" hidden>退出</button></div>
+      </header>
+      <main id="main" tabindex="-1">
+        <div class="page-heading"><div><h1 id="page-title">任务看板</h1><p id="page-description">分配任务，跟进执行，在交付前做最后一次确认。</p></div><div class="page-label" id="page-label">任务流转</div></div>
+        <div id="connection-error" class="notice error" role="alert" hidden><span id="connection-error-text"></span><button id="retry-button" class="text-button">重新连接</button></div>
+        <div id="system-error" class="notice warning" role="status" hidden></div>
+        <p id="remote-note" class="notice" hidden>远程连接 · 任务由电脑上的智能体执行。手机可查看进度、复审及预览下载产物。</p>
+        <section id="agents-section" class="agents-section" aria-labelledby="agents-heading">
+          <div class="section-heading"><h2 id="agents-heading">执行资源</h2><p>将可分配的任务拖到执行器；也可以在任务详情中选择。</p></div>
+          <div id="agent-rack" class="agent-rack" aria-label="任务分配目标"><div class="loading-line">正在读取执行器…</div></div>
+          <details id="agent-settings-panel" class="agent-settings-panel">
+            <summary>配置模型与思考强度<span>为每个执行器保存默认值</span></summary>
+            <div id="agent-settings-editor" class="agent-settings-editor"><p class="field-help">连接后可配置执行器。</p></div>
+          </details>
+        </section>
+        <div class="view-toolbar">
+          <label class="search-field"><span class="sr-only">搜索任务、工作区或运行记录</span><span aria-hidden="true">⌕</span><input id="search-input" type="search" autocomplete="off" placeholder="搜索任务名称、说明或工作区"><kbd aria-hidden="true">/</kbd></label>
+          <div class="filters"><label class="filter-field"><span class="sr-only">按执行器筛选</span><select id="agent-filter"><option value="">全部执行器</option></select></label><label class="filter-field" id="secondary-filter-label" hidden><span class="sr-only" id="secondary-filter-caption">筛选状态</span><select id="secondary-filter"></select></label><span class="result-count" id="result-count">正在读取</span></div>
+        </div>
+        <div id="view-content" aria-busy="true"></div>
+        <footer class="page-footer"><span id="sync-cadence">界面每 2 秒刷新 · 滴答同步周期读取中</span><span>自动检查 → 人工复审 → 完成滴答</span></footer>
+      </main>
+    </div>
+  </div>
+  <div class="drawer-backdrop" id="drawer-backdrop" hidden></div>
+  <aside class="task-drawer" id="task-drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-title" hidden>
+    <header class="drawer-header"><div><span class="drawer-eyebrow">任务详情</span><h2 id="drawer-title">正在读取…</h2></div><button class="icon-button" id="drawer-close" aria-label="关闭任务详情">×</button></header>
+    <div class="drawer-scroll" id="drawer-scroll"><div id="drawer-content"></div></div>
+  </aside>
+  <div class="toast-region" id="toast-region" aria-live="polite" aria-atomic="false"></div>
+  <noscript><div class="noscript">请启用 JavaScript 以读取任务和操作调度台。</div></noscript>
+</body>
+</html>

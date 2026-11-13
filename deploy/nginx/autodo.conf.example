@@ -1,0 +1,38 @@
+server {
+    listen 80;
+    server_name autodo.example.com;
+    location ^~ /.well-known/acme-challenge/ { root /var/www/acme; }
+    location / { return 301 https://autodo.example.com$request_uri; }
+}
+server {
+    listen 443 ssl;
+    server_name autodo.example.com;
+    ssl_certificate /etc/letsencrypt/live/autodo.example.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/autodo.example.com/privkey.pem;
+    ssl_protocols TLSv1.2 TLSv1.3;
+    client_max_body_size 32k;
+    add_header Strict-Transport-Security "max-age=86400" always;
+    access_log /var/log/nginx/autodo.example.com.log;
+    error_log /var/log/nginx/autodo.example.com.error.log;
+    location / {
+        proxy_pass http://127.0.0.1:18766;
+        proxy_http_version 1.1;
+        proxy_set_header Host autodo.example.com;
+        proxy_set_header X-Forwarded-Host autodo.example.com;
+        proxy_set_header X-Forwarded-Proto https;
+        proxy_set_header X-Forwarded-For $remote_addr;
+        include /etc/autodo/proxy-secret.conf;
+        proxy_set_header Connection "";
+        proxy_connect_timeout 5s;
+        proxy_read_timeout 45s;
+        proxy_buffering off;
+        proxy_redirect off;
+        proxy_intercept_errors on;
+        error_page 502 504 =503 @offline;
+    }
+    location @offline {
+        default_type text/plain;
+        charset utf-8;
+        return 503 "电脑派工台暂未连接，请保持电脑开机、联网，并启动派工服务。\n";
+    }
+}

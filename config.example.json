@@ -1,0 +1,44 @@
+{
+  "eligibility_tag": "AI",
+  "project_ids": [],
+  "repositories": {},
+  "enabled_executors": ["codex"],
+  "executor_commands": {},
+  "executor_routes": {},
+  "antigravity_proxy_url": "",
+  "workbuddy_transport": "cli",
+  "doubao_transport": "cli",
+  "repository_checks": {},
+  "workspace_discovery": {
+    "native_agents": true,
+    "collections": []
+  },
+  "remote_access": {
+    "enabled": false,
+    "mode": "tailscale",
+    "port": 8766,
+    "origin": "",
+    "allowed_users": [],
+    "proxy_secret_file": "data/relay-proxy.key",
+    "tunnel_enabled": false,
+    "ssh_alias": "autodo-relay",
+    "relay_port": 18766
+  },
+  "max_concurrent": 1,
+  "poll_seconds": 20,
+  "task_timeout_seconds": 1800,
+  "daily_max_runs": 10,
+  "max_attempts": 2,
+  "model": "gpt-6.1-sol",
+  "agent_settings": {},
+  "models": {},
+  "efforts": {
+    "easy": "low",
+    "medium": "medium",
+    "hard": "high"
+  },
+  "review_effort": "medium",
+  "auto_complete": true,
+  "require_human_review": true,
+  "write_comments": true
+}
